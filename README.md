@@ -1,4 +1,4 @@
-# test
+# OC LETTINGS
 
 ## Description
 Notre nouvelle application, **LitRevu**, permet de demander ou publier des critiques de livres ou d’articles. L’application présente trois cas d’utilisation principaux :

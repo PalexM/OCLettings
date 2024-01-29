@@ -51,4 +51,4 @@ jobs:
           sudo docker pull mrp0p/lettings:latest
           sudo docker stop lettings || true
           sudo docker rm lettings || true
-          sudo docker run --name lettings -d -p 8000:8000 mrp0p/lettings:latest
+          sudo docker run --name lettings -d -p 9000:9000 mrp0p/lettings:latest

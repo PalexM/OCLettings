@@ -49,5 +49,7 @@ jobs:
         key: ${{ secrets.MON_SRV }}
         script: |
           sudo docker pull mrp0p/lettings:latest
-          sudo docker-compose -f ../../docker-compose.yml down || true
-          sudo docker-compose -f ../../docker-compose.yml up -d
+          sudo pwd
+          sudo ls
+          sudo docker-compose -f ../docker-compose.yml down || true
+          sudo docker-compose -f ../docker-compose.yml up -d

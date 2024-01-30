@@ -1,13 +1,16 @@
 version: '3.8'
+
 services:
   web:
-    image: mrp0p/lettings:latest
+    build: .
+    command: python manage.py runserver 0.0.0.0:9000
     volumes:
       - .:/app
-      - static:/app/staticfiles
+      - static_volume:/app/static
     ports:
       - "9000:9000"
-    command: python manage.py runserver 0.0.0.0:9000
+    environment:
+      - PYTHONUNBUFFERED=1
 
 volumes:
   static_volume:

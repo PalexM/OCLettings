@@ -1,0 +1,50 @@
+name: Django CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Build the Docker image
+      run: docker-compose build
+
+    - name: Run the Docker image
+      run: docker-compose up -d
+
+    - name: Run tests
+      run: docker-compose exec web python manage.py test
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v1
+      with:
+        username: mrp0p
+        password: ${{ secrets.DOKER_PASS }}
+
+    - name: Push the Docker image
+      run: |
+        docker tag lettings:latest mrp0p/lettings:latest
+        docker push mrp0p/lettings:latest
+
+    - name: Deploy to server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.MON_SRV }}
+        script: |
+          docker pull my-dockerhub-username/my-repo-name:latest
+          docker-compose down
+          docker-compose up -d

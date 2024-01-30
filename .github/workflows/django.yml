@@ -49,6 +49,5 @@ jobs:
         key: ${{ secrets.MON_SRV }}
         script: |
           sudo docker pull mrp0p/lettings:latest
-          sudo docker stop lettings || true
-          sudo docker rm lettings || true
-          sudo docker run --name lettings -d -p 9000:9000 mrp0p/lettings:latest
+          sudo docker-compose down || true
+          sudo docker-compose up -d

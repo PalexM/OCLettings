@@ -50,5 +50,5 @@ jobs:
         script: |
           sudo docker pull mrp0p/lettings:latest
           sudo docker-compose down || true
-          docker-compose -p 9000:9000 up -d
+          docker-compose -p
  

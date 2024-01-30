@@ -7,7 +7,7 @@ services:
       - static:/app/staticfiles
     ports:
       - "9000:9000"
-    command: python manage.py runserver 0.0.0.0:9000 lettings
+    command: python manage.py runserver 0.0.0.0:9000
 
 volumes:
   static_volume:

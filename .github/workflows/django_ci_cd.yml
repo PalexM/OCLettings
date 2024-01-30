@@ -25,10 +25,6 @@
      needs: build_and_test
 
      steps:
-     - name: Build the Docker image
-       run: docker-compose build
-     - name: Run the Docker image
-       run: docker-compose up -d
      - uses: actions/checkout@v2
      - name: Login to DockerHub
        uses: docker/login-action@v1

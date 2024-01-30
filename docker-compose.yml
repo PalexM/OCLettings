@@ -8,5 +8,6 @@ services:
       - static_volume:/app/staticfiles
     ports:
       - "9000:9000"
+
 volumes:
   static_volume:

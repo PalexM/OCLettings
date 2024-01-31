@@ -12,3 +12,5 @@ services:
 
 volumes:
   static_volume:
+
+

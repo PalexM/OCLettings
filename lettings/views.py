@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from lettings.models import Letting
+from .models import Letting
 
 
 def lettings_index(request):

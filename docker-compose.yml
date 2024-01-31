@@ -1,16 +1,15 @@
-version: '3'
+version: '3.8'
 
 services:
-  lettings_app:
-    image: mrp0p/lettings:latest
+  django-app:
+    image: mrp0p/lettings
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py runserver 0.0.0.0:9000"
     volumes:
       - static_volume:/app/static
     ports:
       - "9000:9000"
-    environment:
-      - DEBUG=False
 
 volumes:
   static_volume:
-
-

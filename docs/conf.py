@@ -7,13 +7,13 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 import os
 import sys
-
-sys.path.insert(0, os.path.abspath(".."))
-
-os.environ["DJANGO_SETTINGS_MODULE"] = "oc_lettings_site.settings"
 import django
 
 django.setup()
+sys.path.insert(0, os.path.abspath(".."))
+
+os.environ["DJANGO_SETTINGS_MODULE"] = "oc_lettings_site.settings"
+
 
 project = "OC Lettings"
 copyright = "2024, Alexandru Pop"

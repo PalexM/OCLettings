@@ -1,7 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseServerError
 from .models import Letting
-import sentry_sdk
 
 
 def index(request):

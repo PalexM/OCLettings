@@ -1,55 +1,67 @@
- name: Django 
+name: Django CI/CD
 
- on:
-   push:
-     branches: [ main ]
-   pull_request:
-     branches: [ main ]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
- jobs:
-   build_and_test:
-     runs-on: ubuntu-latest
-     steps:
-     - uses: actions/checkout@v2
-     - name: Set up Python 3.8
-       uses: actions/setup-python@v2
-       with:
-         python-version: 3.8
-     - name: Install Dependencies
-       run: pip install -r requirements.txt
-     - name: Run Tests
-       run: python manage.py test
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+      - name: Run Tests
+        run: python manage.py test
 
-   build_and_push_docker:
-     runs-on: ubuntu-latest
-     needs: build_and_test
+  build_and_push_docker:
+    runs-on: ubuntu-latest
+    needs: build_and_test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: mrp0p
+          password: ${{ secrets.DOKER_PASS }}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: mrp0p/lettings:latest
 
-     steps:
-     - uses: actions/checkout@v2
-     - name: Login to DockerHub
-       uses: docker/login-action@v1
-       with:
-         username: mrp0p
-         password: ${{ secrets.DOKER_PASS }}
-     - name: Build and push Docker image
-       uses: docker/build-push-action@v2
-       with:
-         context: .
-         push: true
-         tags: mrp0p/lettings:latest
+      # Pas nou: Crearea și marcarea unei noi versiuni în Sentry
+      - name: Create Sentry release and upload source maps
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: your_sentry_org
+          SENTRY_PROJECT: your_sentry_project
+        run: |
+          export SENTRY_RELEASE=$(git rev-parse HEAD)
+          sentry-cli releases new -p $SENTRY_PROJECT $SENTRY_RELEASE
+          sentry-cli releases set-commits $SENTRY_RELEASE --auto
+          sentry-cli releases finalize $SENTRY_RELEASE
+          # Optional: Upload source maps dacă este aplicabil
+          # sentry-cli releases files $SENTRY_RELEASE upload-sourcemaps path_to_sourcemaps
 
-   deploy:
-     runs-on: ubuntu-latest
-     needs: build_and_push_docker
-     steps:
-     - name: Deploy to EC2
-       uses: appleboy/ssh-action@master
-       with:
-         host: ${{ secrets.EC2_HOST }}
-         username: ubuntu
-         key: ${{ secrets.MON_SRV }}
-         script: |
-           sudo docker pull mrp0p/lettings:latest
-           sudo docker-compose down
-           sudo docker-compose up -d
- 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build_and_push_docker
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.MON_SRV }}
+          script: |
+            sudo docker pull mrp0p/lettings:latest
+            sudo docker-compose down
+            sudo docker-compose up -d

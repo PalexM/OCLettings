@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseServerError
+from django.template import loader
 
 
 def index(request):
@@ -43,4 +45,5 @@ def custom_500_error(request, exception):
     Returns:
         HttpResponse: Renders the '500.html' template with a 500 status code.
     """
-    return render(request, "500.html", status=500)
+    template = loader.get_template("500.html")
+    return HttpResponseServerError(template.render({}, request))

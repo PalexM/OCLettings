@@ -37,7 +37,9 @@ jobs:
           push: true
           tags: mrp0p/lettings:latest
 
-      # Pas nou: Crearea și marcarea unei noi versiuni în Sentry
+      - name: Install Sentry CLI
+        run: |
+              curl -sL https://sentry.io/get-cli/ | bash
       - name: Create Sentry release and upload source maps
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}

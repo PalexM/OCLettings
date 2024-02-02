@@ -17,13 +17,10 @@ def index(request):
     Returns:
         HttpResponse: An HttpResponse object that renders the lettings list template.
     """
-    try:
-        lettings_list = Letting.objects.all()
-        context = {"lettings_list": lettings_list}
-        return render(request, "lettings/index.html", context)
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        return HttpResponseServerError("Something went wrong")
+
+    lettings_list = Letting.objects.all()
+    context = {"lettings_list": lettings_list}
+    return render(request, "lettings/index.html", context)
 
 
 def letting(request, letting_id):
@@ -40,13 +37,10 @@ def letting(request, letting_id):
     Returns:
         HttpResponse: An HttpResponse object that renders the letting detail template.
     """
-    try:
-        letting = Letting.objects.get(id=letting_id)
-        context = {
-            "title": letting.title,
-            "address": letting.address,
-        }
-        return render(request, "lettings/letting.html", context)
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        return HttpResponseServerError("Something went wrong")
+
+    letting = Letting.objects.get(id=letting_id)
+    context = {
+        "title": letting.title,
+        "address": letting.address,
+    }
+    return render(request, "lettings/letting.html", context)

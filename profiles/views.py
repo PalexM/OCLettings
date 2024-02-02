@@ -17,13 +17,10 @@ def index(request):
     Returns:
         HttpResponse: An HttpResponse object that renders the list of profiles.
     """
-    try:
-        profiles_list = Profile.objects.all()
-        context = {"profiles_list": profiles_list}
-        return render(request, "profiles/index.html", context)
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        return HttpResponseServerError("Something went wrong")
+
+    profiles_list = Profile.objects.all()
+    context = {"profiles_list": profiles_list}
+    return render(request, "profiles/index.html", context)
 
 
 def profile(request, username):
@@ -40,10 +37,7 @@ def profile(request, username):
     Returns:
         HttpResponse: An HttpResponse object that renders the detailed view of a user's profile.
     """
-    try:
-        profile = Profile.objects.get(user__username=username)
-        context = {"profile": profile}
-        return render(request, "profiles/profile.html", context)
-    except Exception as e:
-        sentry_sdk.capture_exception(e)
-        return HttpResponseServerError("Something went wrong")
+
+    profile = Profile.objects.get(user__username=username)
+    context = {"profile": profile}
+    return render(request, "profiles/profile.html", context)
